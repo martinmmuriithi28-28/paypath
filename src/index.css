@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  background: #ebf7f5;
+  color: #102d35;
+  font-family: Arial, sans-serif;
+}
+
+/* The dark top banner. */
+.app-header {
+  background: #102d35;
+  padding: 24px;
+}
+
+.app-header h1 {
+  color: white;
+  font-size: 28px;
+  margin: 0 0 4px;
+}
+
+
+.app-header h1 span {
+  color: #d9fa57;
+}
+
+.app-header p {
+  color: #b9d3d0;
+  margin: 0;
+}
+
+
+.summary-card,
+.loan-card {
+  background: white;
+  border: 1px solid #d3e6e3;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.summary-card h3 {
+  font-size: 14px;
+  color: #5b7a80;
+  margin: 0 0 6px;
+}
+
+.summary-card .value {
+  font-size: 23px;
+  font-weight: bold;
+  margin: 0;
+}
+ 
+.loan-card {
+  margin-bottom: 12px;
+}

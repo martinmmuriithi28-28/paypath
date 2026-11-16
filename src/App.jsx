@@ -1,33 +1,52 @@
+import { Container, Row, Col } from "react-bootstrap";
 import SummaryCard from "./components/SummaryCard";
 import LoanCard from "./components/LoanCard";
-
+import { formatMoney } from "./utils/loanUtils";
 
 const sampleLoans = [
-  { id: 1, lender: "Example Bank", amount: 50000, dueAmount: 32000, dueDate: "2026-11-28" },
+  { id: 1, lender: "Equity Bank", amount: 50000, dueAmount: 32000, dueDate: "2026-11-28" },
   { id: 2, lender: "Sacco Loan", amount: 120000, dueAmount: 90000, dueDate: "2026-12-15" },
 ];
 
 function App() {
-  const appName = "PayPath";
-  const tagline = "Your money. Your way forward.";
-
   return (
-    <div>
-      <h1>{appName}</h1>
-      <p>{tagline}</p>
+    <>
+      <header className="app-header">
+        <h1>
+          Pay<span>Path</span>
+        </h1>
+        <p>Your money, your way</p>
+      </header>
 
-      <h2>Your Loan Summary</h2>
-      
-      <SummaryCard title="Outstanding Loans" value="KSh 122000" />
-      <SummaryCard title="Due This Month" value="KSh 32000" />
-      <SummaryCard title="Monthly Income" value="KSh 30000" />
+      <Container className="py-4">
+        <h2 className="h4 mb-3">Your Loan Summary</h2>
 
-      <h2>My Loans</h2>
-    
-      {sampleLoans.map((loan) => (
-        <LoanCard key={loan.id} loan={loan} />
-      ))}
-    </div>
+        <Row className="g-3 mb-4">
+          <Col xs={12} sm={6} xl={3}>
+            <SummaryCard title="Outstanding Loans" value={formatMoney(122000)} />
+          </Col>
+          <Col xs={12} sm={6} xl={3}>
+            <SummaryCard title="Due This Month" value={formatMoney(32000)} />
+          </Col>
+          <Col xs={12} sm={6} xl={3}>
+            <SummaryCard title="Monthly Income" value={formatMoney(30000)} />
+          </Col>
+          <Col xs={12} sm={6} xl={3}>
+            <SummaryCard title="Repayment Pressure" value="35.6%" />
+          </Col>
+        </Row>
+
+        <h2 className="h4 mb-3">My Loans</h2>
+
+        {sampleLoans.length === 0 && (
+          <p className="text-secondary">No loans added yet.</p>
+        )}
+
+        {sampleLoans.map((loan) => (
+          <LoanCard key={loan.id} loan={loan} />
+        ))}
+      </Container>
+    </>
   );
 }
 
