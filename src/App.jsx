@@ -3,12 +3,18 @@ import SummaryCard from "./components/SummaryCard";
 import LoanCard from "./components/LoanCard";
 import { formatMoney } from "./utils/loanUtils";
 
+
 const sampleLoans = [
   { id: 1, lender: "Equity Bank", amount: 50000, dueAmount: 32000, dueDate: "2026-11-28" },
   { id: 2, lender: "Sacco Loan", amount: 120000, dueAmount: 90000, dueDate: "2026-12-15" },
 ];
 
 function App() {
+  
+  function handleAddLoanClick(source) {
+    console.log("Add Loan clicked from:", source);
+  }
+
   return (
     <>
       <header className="app-header">
@@ -36,7 +42,17 @@ function App() {
           </Col>
         </Row>
 
-        <h2 className="h4 mb-3">My Loans</h2>
+       
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="h4 mb-0">My Loans</h2>
+
+          <button
+            className="btn btn-sm btn-dark"
+            onClick={() => handleAddLoanClick("My Loans header")}
+          >
+            Add Loan
+          </button>
+        </div>
 
         {sampleLoans.length === 0 && (
           <p className="text-secondary">No loans added yet.</p>
