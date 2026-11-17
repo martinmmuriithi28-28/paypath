@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SummaryCard from "./components/SummaryCard";
 import LoanCard from "./components/LoanCard";
+import AddLoanForm from "./components/AddLoanForm";
 import { formatMoney } from "./utils/loanUtils";
 
 
@@ -11,25 +13,8 @@ const sampleLoans = [
 ];
 
 function App() {
-  
-  const [loans, setLoans] = useState(sampleLoans);
 
-  
-  function handleAddLoanClick(source) {
-    console.log("Add Loan clicked from:", source);
-
-  
-    const newLoan = {
-      id: loans.length + 1,
-      lender: "New Loan " + (loans.length + 1),
-      amount: 10000,
-      dueAmount: 10000,
-      dueDate: "2026-12-31",
-    };
-
-   
-    setLoans([...loans, newLoan]);
-  }
+  const [loans] = useState(sampleLoans);
 
   return (
     <>
@@ -40,10 +25,9 @@ function App() {
         <p>Your money, your way</p>
       </header>
 
-     
+      
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
-
 
         <Row className="g-3 mb-4">
           <Col xs={12} sm={6} xl={3}>
@@ -60,22 +44,16 @@ function App() {
           </Col>
         </Row>
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="h4 mb-0">My Loans</h2>
+      
+        <AddLoanForm />
 
-         
-          <button
-            className="btn btn-sm btn-dark"
-            onClick={() => handleAddLoanClick("My Loans header")}
-          >
-            Add Loan
-          </button>
-        </div>
+        <h2 className="h4 mb-3">My Loans</h2>
 
+        
         {loans.length === 0 && (
           <p className="text-secondary">No loans added yet.</p>
         )}
-
+s
         {loans.map((loan) => (
           <LoanCard key={loan.id} loan={loan} />
         ))}
