@@ -5,6 +5,7 @@ import LoanCard from "./components/LoanCard";
 import AddLoanForm from "./components/AddLoanForm";
 import { formatMoney } from "./utils/loanUtils";
 
+
 const API_URL = "http://localhost:3001/loans";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
   
   const [error, setError] = useState("");
 
- 
+  
   useEffect(() => {
     fetch(API_URL)
       .then((response) => {
@@ -39,7 +40,7 @@ function App() {
 
 
   function handleAddLoan(formData) {
-  
+    
     const newLoan = {
       lender: formData.lender,
       amount: Number(formData.amount),
@@ -47,7 +48,6 @@ function App() {
       dueDate: formData.dueDate,
     };
 
-    
     fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ function App() {
         if (!response.ok) {
           throw new Error("Could not save the loan.");
         }
-      
+        
         return response.json();
       })
       .then((savedLoan) => {
@@ -69,7 +69,7 @@ function App() {
       });
   }
 
-
+  
   function handleDeleteLoan(id) {
    
     fetch(API_URL + "/" + id, { method: "DELETE" })
@@ -77,11 +77,35 @@ function App() {
         if (!response.ok) {
           throw new Error("Could not delete the loan.");
         }
-        
+       
         setLoans(loans.filter((loan) => loan.id !== id));
       })
       .catch(() => {
         setError("Could not delete the loan. Is the server running?");
+      });
+  }
+
+  
+  function handleUpdateLoan(id, newDueAmount) {
+    
+    fetch(API_URL + "/" + id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dueAmount: newDueAmount }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not update the loan.");
+        }
+        
+        return response.json();
+      })
+      .then((updatedLoan) => {
+    
+        setLoans(loans.map((loan) => (loan.id === id ? updatedLoan : loan)));
+      })
+      .catch(() => {
+        setError("Could not update the loan. Is the server running?");
       });
   }
 
@@ -94,7 +118,7 @@ function App() {
         <p>Your money, your way</p>
       </header>
 
-  
+     
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
 
@@ -114,20 +138,26 @@ function App() {
           </Col>
         </Row>
 
-        
+        {/* We pass handleAddLoan DOWN to the form as a prop called onAddLoan. */}
         <AddLoanForm onAddLoan={handleAddLoan} />
 
         <h2 className="h4 mb-3">My Loans</h2>
 
-        
+     
         {loading && <p className="text-secondary">Loading loans...</p>}
         {error && <p className="text-danger">{error}</p>}
         {!loading && !error && loans.length === 0 && (
           <p className="text-secondary">No loans added yet.</p>
         )}
 
+        
         {loans.map((loan) => (
-          <LoanCard key={loan.id} loan={loan} onDelete={handleDeleteLoan} />
+          <LoanCard
+            key={loan.id}
+            loan={loan}
+            onDelete={handleDeleteLoan}
+            onUpdate={handleUpdateLoan}
+          />
         ))}
       </Container>
     </>
