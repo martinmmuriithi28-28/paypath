@@ -1,19 +1,17 @@
 import { useState } from "react";
 
-function AddLoanForm() {
-  
+function AddLoanForm({ onAddLoan }) {
+
   const [lender, setLender] = useState("");
   const [amount, setAmount] = useState("");
   const [dueDate, setDueDate] = useState("");
 
- 
+  
   function handleSubmit(event) {
     
     event.preventDefault();
 
-    
-    console.log("Form submitted:", { lender, amount, dueDate });
-
+    onAddLoan({ lender, amount, dueDate });
 
     setLender("");
     setAmount("");
@@ -28,11 +26,12 @@ function AddLoanForm() {
         <label htmlFor="lender" className="form-label">
           Lender
         </label>
-       
+    
         <input
           id="lender"
           className="form-control"
           type="text"
+          required
           value={lender}
           onChange={(event) => setLender(event.target.value)}
         />
@@ -46,6 +45,8 @@ function AddLoanForm() {
           id="amount"
           className="form-control"
           type="number"
+          required
+          min="1"
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
         />
@@ -59,6 +60,7 @@ function AddLoanForm() {
           id="dueDate"
           className="form-control"
           type="date"
+          required
           value={dueDate}
           onChange={(event) => setDueDate(event.target.value)}
         />
