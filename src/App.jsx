@@ -5,7 +5,6 @@ import LoanCard from "./components/LoanCard";
 import AddLoanForm from "./components/AddLoanForm";
 import { formatMoney } from "./utils/loanUtils";
 
-
 const API_URL = "http://localhost:3001/loans";
 
 function App() {
@@ -16,7 +15,7 @@ function App() {
   
   const [error, setError] = useState("");
 
-  
+ 
   useEffect(() => {
     fetch(API_URL)
       .then((response) => {
@@ -38,8 +37,9 @@ function App() {
       });
   }, []);
 
+
   function handleAddLoan(formData) {
-    
+  
     const newLoan = {
       lender: formData.lender,
       amount: Number(formData.amount),
@@ -47,7 +47,7 @@ function App() {
       dueDate: formData.dueDate,
     };
 
-  
+    
     fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,15 +57,31 @@ function App() {
         if (!response.ok) {
           throw new Error("Could not save the loan.");
         }
-        
+      
         return response.json();
       })
       .then((savedLoan) => {
-      
+        
         setLoans([...loans, savedLoan]);
       })
       .catch(() => {
         setError("Could not save the loan. Is the server running?");
+      });
+  }
+
+
+  function handleDeleteLoan(id) {
+   
+    fetch(API_URL + "/" + id, { method: "DELETE" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not delete the loan.");
+        }
+        
+        setLoans(loans.filter((loan) => loan.id !== id));
+      })
+      .catch(() => {
+        setError("Could not delete the loan. Is the server running?");
       });
   }
 
@@ -78,8 +94,10 @@ function App() {
         <p>Your money, your way</p>
       </header>
 
+  
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
+
 
         <Row className="g-3 mb-4">
           <Col xs={12} sm={6} xl={3}>
@@ -96,10 +114,12 @@ function App() {
           </Col>
         </Row>
 
+        
         <AddLoanForm onAddLoan={handleAddLoan} />
 
         <h2 className="h4 mb-3">My Loans</h2>
 
+        
         {loading && <p className="text-secondary">Loading loans...</p>}
         {error && <p className="text-danger">{error}</p>}
         {!loading && !error && loans.length === 0 && (
@@ -107,7 +127,7 @@ function App() {
         )}
 
         {loans.map((loan) => (
-          <LoanCard key={loan.id} loan={loan} />
+          <LoanCard key={loan.id} loan={loan} onDelete={handleDeleteLoan} />
         ))}
       </Container>
     </>
