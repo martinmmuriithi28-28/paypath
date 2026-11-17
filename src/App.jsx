@@ -4,22 +4,23 @@ import SummaryCard from "./components/SummaryCard";
 import LoanCard from "./components/LoanCard";
 import AddLoanForm from "./components/AddLoanForm";
 import { formatMoney } from "./utils/loanUtils";
- 
+
 
 const API_URL = "http://localhost:3001/loans";
 
 function App() {
-
+  
   const [loans, setLoans] = useState([]);
   
   const [loading, setLoading] = useState(true);
   
   const [error, setError] = useState("");
 
+  
   useEffect(() => {
     fetch(API_URL)
       .then((response) => {
-  
+        
         if (!response.ok) {
           throw new Error("Could not load loans.");
         }
@@ -27,28 +28,45 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setLoans(data);
+        setLoans(data); 
         setLoading(false); 
       })
       .catch(() => {
-      
+        
         setError("Could not load loans. Is the server running?");
         setLoading(false);
       });
   }, []);
 
-  
   function handleAddLoan(formData) {
     
     const newLoan = {
-      id: loans.length + 1,
       lender: formData.lender,
       amount: Number(formData.amount),
       dueAmount: Number(formData.amount),
       dueDate: formData.dueDate,
     };
 
-    setLoans([...loans, newLoan]);
+  
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newLoan),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not save the loan.");
+        }
+        
+        return response.json();
+      })
+      .then((savedLoan) => {
+      
+        setLoans([...loans, savedLoan]);
+      })
+      .catch(() => {
+        setError("Could not save the loan. Is the server running?");
+      });
   }
 
   return (
@@ -62,7 +80,6 @@ function App() {
 
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
-
 
         <Row className="g-3 mb-4">
           <Col xs={12} sm={6} xl={3}>
@@ -83,7 +100,6 @@ function App() {
 
         <h2 className="h4 mb-3">My Loans</h2>
 
-        {/* Three messages, each shown only in its own situation (&&) */}
         {loading && <p className="text-secondary">Loading loans...</p>}
         {error && <p className="text-danger">{error}</p>}
         {!loading && !error && loans.length === 0 && (
