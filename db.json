@@ -1,0 +1,18 @@
+{
+  "loans": [
+    {
+      "id": 1,
+      "lender": "Equity Bank",
+      "amount": 50000,
+      "dueAmount": 32000,
+      "dueDate": "2026-11-28"
+    },
+    {
+      "id": 2,
+      "lender": "Sacco Loan",
+      "amount": 120000,
+      "dueAmount": 90000,
+      "dueDate": "2026-12-15"
+    }
+  ]
+}
