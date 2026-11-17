@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SummaryCard from "./components/SummaryCard";
@@ -13,8 +12,23 @@ const sampleLoans = [
 ];
 
 function App() {
+  
+  
+  const [loans, setLoans] = useState(sampleLoans);
 
-  const [loans] = useState(sampleLoans);
+  
+  function handleAddLoan(formData) {
+    
+    const newLoan = {
+      id: loans.length + 1,
+      lender: formData.lender,
+      amount: Number(formData.amount),
+      dueAmount: Number(formData.amount),
+      dueDate: formData.dueDate,
+    };
+
+    setLoans([...loans, newLoan]);
+  }
 
   return (
     <>
@@ -25,7 +39,6 @@ function App() {
         <p>Your money, your way</p>
       </header>
 
-      
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
 
@@ -44,16 +57,14 @@ function App() {
           </Col>
         </Row>
 
-      
-        <AddLoanForm />
+        <AddLoanForm onAddLoan={handleAddLoan} />
 
         <h2 className="h4 mb-3">My Loans</h2>
 
-        
         {loans.length === 0 && (
           <p className="text-secondary">No loans added yet.</p>
         )}
-s
+
         {loans.map((loan) => (
           <LoanCard key={loan.id} loan={loan} />
         ))}
