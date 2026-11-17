@@ -1,20 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SummaryCard from "./components/SummaryCard";
 import LoanCard from "./components/LoanCard";
 import AddLoanForm from "./components/AddLoanForm";
 import { formatMoney } from "./utils/loanUtils";
+ 
 
-
-const sampleLoans = [
-  { id: 1, lender: "Equity Bank", amount: 50000, dueAmount: 32000, dueDate: "2026-11-28" },
-  { id: 2, lender: "Sacco Loan", amount: 120000, dueAmount: 90000, dueDate: "2026-12-15" },
-];
+const API_URL = "http://localhost:3001/loans";
 
 function App() {
+
+  const [loans, setLoans] = useState([]);
   
+  const [loading, setLoading] = useState(true);
   
-  const [loans, setLoans] = useState(sampleLoans);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((response) => {
+  
+        if (!response.ok) {
+          throw new Error("Could not load loans.");
+        }
+        
+        return response.json();
+      })
+      .then((data) => {
+        setLoans(data);
+        setLoading(false); 
+      })
+      .catch(() => {
+      
+        setError("Could not load loans. Is the server running?");
+        setLoading(false);
+      });
+  }, []);
 
   
   function handleAddLoan(formData) {
@@ -42,6 +63,7 @@ function App() {
       <Container className="py-4">
         <h2 className="h4 mb-3">Your Loan Summary</h2>
 
+
         <Row className="g-3 mb-4">
           <Col xs={12} sm={6} xl={3}>
             <SummaryCard title="Outstanding Loans" value={formatMoney(122000)} />
@@ -61,7 +83,10 @@ function App() {
 
         <h2 className="h4 mb-3">My Loans</h2>
 
-        {loans.length === 0 && (
+        {/* Three messages, each shown only in its own situation (&&) */}
+        {loading && <p className="text-secondary">Loading loans...</p>}
+        {error && <p className="text-danger">{error}</p>}
+        {!loading && !error && loans.length === 0 && (
           <p className="text-secondary">No loans added yet.</p>
         )}
 
