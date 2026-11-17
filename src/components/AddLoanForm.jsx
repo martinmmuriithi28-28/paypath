@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useRef, useId } from "react";
 
 function AddLoanForm({ onAddLoan }) {
-
+  
   const [lender, setLender] = useState("");
   const [amount, setAmount] = useState("");
   const [dueDate, setDueDate] = useState("");
 
   
+  const id = useId();
+
+  const lenderRef = useRef(null);
+
+
   function handleSubmit(event) {
     
     event.preventDefault();
 
+    
     onAddLoan({ lender, amount, dueDate });
 
     setLender("");
     setAmount("");
     setDueDate("");
+
+    
+    lenderRef.current.focus();
   }
 
   return (
@@ -23,12 +32,15 @@ function AddLoanForm({ onAddLoan }) {
       <h2 className="h5 mb-3">Add a loan</h2>
 
       <div className="mb-3">
-        <label htmlFor="lender" className="form-label">
+        
+        <label htmlFor={id + "-lender"} className="form-label">
           Lender
         </label>
-    
+       
+       
         <input
-          id="lender"
+          id={id + "-lender"}
+          ref={lenderRef}
           className="form-control"
           type="text"
           required
@@ -38,11 +50,11 @@ function AddLoanForm({ onAddLoan }) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="amount" className="form-label">
+        <label htmlFor={id + "-amount"} className="form-label">
           Original amount (KSh)
         </label>
         <input
-          id="amount"
+          id={id + "-amount"}
           className="form-control"
           type="number"
           required
@@ -53,11 +65,11 @@ function AddLoanForm({ onAddLoan }) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="dueDate" className="form-label">
+        <label htmlFor={id + "-dueDate"} className="form-label">
           Due date
         </label>
         <input
-          id="dueDate"
+          id={id + "-dueDate"}
           className="form-control"
           type="date"
           required
