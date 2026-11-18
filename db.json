@@ -14,5 +14,8 @@
       "dueAmount": 90000,
       "dueDate": "2026-12-15"
     }
-  ]
+  ],
+  "settings": {
+    "monthlyIncome": 45000
+  }
 }
