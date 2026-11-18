@@ -20,3 +20,10 @@ export function calculateTotalBorrowed(loans) {
   }
   return total;
 }
+
+export function calculatePercentage(part, whole) {
+  if (whole === 0) {
+    return 0;
+  }
+  return (part / whole) * 100;
+}

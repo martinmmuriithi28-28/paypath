@@ -7,8 +7,8 @@ function AddLoan({ onAddLoan }) {
   const navigate = useNavigate();
 
   function handleAdd(formData) {
-    onAddLoan(formData); // App sends the POST request
-    navigate("/loans"); // then take the user to the loan list
+    onAddLoan(formData);
+    navigate("/loans");
   }
 
   return (
