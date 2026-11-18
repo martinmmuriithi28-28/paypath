@@ -6,15 +6,19 @@ import Dashboard from "./routes/Dashboard";
 import LoanList from "./routes/LoanList";
 import AddLoan from "./routes/AddLoan";
 import LoanDetail from "./routes/LoanDetail";
+import Settings from "./routes/Settings";
 import NotFound from "./routes/NotFound";
 
 
 const API_URL = "http://localhost:3001/loans";
+const SETTINGS_URL = "http://localhost:3001/settings";
 
 function App() {
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
 
   
   useEffect(() => {
@@ -32,6 +36,23 @@ function App() {
       .catch(() => {
         setError("Could not load loans. Is the server running?");
         setLoading(false);
+      });
+  }, []);
+
+  
+  useEffect(() => {
+    fetch(SETTINGS_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not load settings.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setMonthlyIncome(data.monthlyIncome);
+      })
+      .catch(() => {
+        setError("Could not load settings. Is the server running?");
       });
   }, []);
 
@@ -63,7 +84,6 @@ function App() {
       });
   }
 
-  
   function handleDeleteLoan(id) {
     fetch(API_URL + "/" + id, { method: "DELETE" })
       .then((response) => {
@@ -98,16 +118,32 @@ function App() {
       });
   }
 
+  function handleSaveIncome(newIncome) {
+    return fetch(SETTINGS_URL, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ monthlyIncome: newIncome }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not save the income.");
+        }
+        return response.json();
+      })
+      .then((savedSettings) => {
+        setMonthlyIncome(savedSettings.monthlyIncome);
+      });
+  }
+
   return (
     <Routes>
-      
       <Route element={<Layout />}>
         <Route path="/" element={<Landing />} />
         <Route
           path="/dashboard"
           element={<Dashboard loans={loans} loading={loading} error={error} />}
         />
-        <Route
+               <Route
           path="/loans"
           element={
             <LoanList
@@ -120,8 +156,7 @@ function App() {
           }
         />
         <Route path="/loans/new" element={<AddLoan onAddLoan={handleAddLoan} />} />
-
-      <Route
+        <Route
           path="/loans/:id"
           element={
             <LoanDetail
@@ -132,6 +167,10 @@ function App() {
               onUpdate={handleUpdateLoan}
             />
           }
+        />
+        <Route
+          path="/settings"
+          element={<Settings monthlyIncome={monthlyIncome} onSave={handleSaveIncome} />}
         />
         
         <Route path="*" element={<NotFound />} />
