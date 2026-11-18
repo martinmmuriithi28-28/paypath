@@ -143,7 +143,7 @@ function App() {
           path="/dashboard"
           element={<Dashboard loans={loans} loading={loading} error={error} />}
         />
-        <Route
+               <Route
           path="/loans"
           element={
             <LoanList

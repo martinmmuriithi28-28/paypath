@@ -33,3 +33,20 @@ export function calculatePercentage(part, whole) {
   }
   return (part / whole) * 100;
 }
+
+export function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+
+export function calculateDueThisMonth(loans) {
+  
+  const thisMonth = getToday().slice(0, 7);
+  let total = 0;
+  for (const loan of loans) {
+    if (loan.dueDate.slice(0, 7) === thisMonth) {
+      total += loan.dueAmount;
+    }
+  }
+  return total;
+}
