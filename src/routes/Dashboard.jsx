@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import SummaryCard from "../components/SummaryCard";
 import {
   formatMoney,
@@ -7,13 +7,12 @@ import {
   calculateTotalBorrowed,
 } from "../utils/loanUtils";
 
-
 function Dashboard({ loans, loading, error }) {
   const outstanding = calculateTotalOutstanding(loans);
   const borrowed = calculateTotalBorrowed(loans);
 
   return (
-    <>
+    <Container className="py-4">
       <h1 className="h3 mb-3">Dashboard</h1>
 
       {loading && <p className="text-secondary">Loading loans...</p>}
@@ -37,7 +36,7 @@ function Dashboard({ loans, loading, error }) {
       <Link to="/loans" className="btn btn-dark">
         View all loans
       </Link>
-    </>
+    </Container>
   );
 }
 

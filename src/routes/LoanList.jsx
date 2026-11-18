@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import LoanCard from "../components/LoanCard";
 
 function LoanList({ loans, loading, error, onDelete, onUpdate }) {
   return (
-    <>
+    <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="h3 mb-0">My Loans</h1>
         <Link to="/loans/new" className="btn btn-sm btn-dark">
@@ -25,7 +26,7 @@ function LoanList({ loans, loading, error, onDelete, onUpdate }) {
           onUpdate={onUpdate}
         />
       ))}
-    </>
+    </Container>
   );
 }
 
