@@ -1,6 +1,12 @@
 //Adds KSH to a number and formats it to 2 decimal places
 export function formatMoney(amount) {
-  return "KSh " + amount.toFixed(2);
+  return (
+    "KSh " +
+    amount.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  );
 }
 
 // Adds up the amount still due on every loan.
