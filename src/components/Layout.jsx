@@ -23,6 +23,9 @@ function Layout() {
             <NavLink to="/loans/new" className="top-link">
               Add Loan
             </NavLink>
+            <NavLink to="/settings" className="top-link">
+              Settings
+            </NavLink>
           </div>
         </Container>
       </nav>
