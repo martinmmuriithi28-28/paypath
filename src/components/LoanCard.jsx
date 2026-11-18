@@ -1,33 +1,27 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { formatMoney } from "../utils/loanUtils";
 
-function LoanCard({ loan, onDelete, onUpdate }) {
-  
+function LoanCard({ loan, onDelete, onUpdate, showLink }) {
   const [showDetails, setShowDetails] = useState(false);
-  
   const [newDue, setNewDue] = useState(String(loan.dueAmount));
-
 
   function handleViewClick() {
     setShowDetails(!showDetails);
   }
 
-  
   function handleUpdateSubmit(event) {
-    event.preventDefault(); 
-    
+    event.preventDefault();
     onUpdate(loan.id, Number(newDue));
   }
 
   return (
     <div className="loan-card">
-    
       <h3 className="h5">{loan.lender}</h3>
       <p className="mb-1">Original amount: {formatMoney(loan.amount)}</p>
       <p className="mb-1">Amount still due: {formatMoney(loan.dueAmount)}</p>
       <p className="mb-2">Due date: {loan.dueDate}</p>
 
-      
       {showDetails && (
         <div className="mb-2">
           <p className="mb-2 text-secondary">
@@ -57,6 +51,12 @@ function LoanCard({ loan, onDelete, onUpdate }) {
       </button>
 
      
+      {showLink && (
+        <Link to={"/loans/" + loan.id} className="btn btn-sm btn-outline-dark ms-2">
+          Open page
+        </Link>
+      )}
+
       <button
         className="btn btn-sm btn-outline-danger ms-2"
         onClick={() => onDelete(loan.id)}

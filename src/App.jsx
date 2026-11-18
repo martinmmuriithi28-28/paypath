@@ -5,6 +5,7 @@ import Landing from "./routes/Landing";
 import Dashboard from "./routes/Dashboard";
 import LoanList from "./routes/LoanList";
 import AddLoan from "./routes/AddLoan";
+import LoanDetail from "./routes/LoanDetail";
 import NotFound from "./routes/NotFound";
 
 
@@ -119,6 +120,19 @@ function App() {
           }
         />
         <Route path="/loans/new" element={<AddLoan onAddLoan={handleAddLoan} />} />
+
+      <Route
+          path="/loans/:id"
+          element={
+            <LoanDetail
+              loans={loans}
+              loading={loading}
+              error={error}
+              onDelete={handleDeleteLoan}
+              onUpdate={handleUpdateLoan}
+            />
+          }
+        />
         
         <Route path="*" element={<NotFound />} />
       </Route>
