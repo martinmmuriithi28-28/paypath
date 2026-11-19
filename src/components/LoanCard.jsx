@@ -2,17 +2,21 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../utils/loanUtils";
 
+
 function LoanCard({ loan, onDelete, onUpdate, showLink }) {
   const [showDetails, setShowDetails] = useState(false);
-  const [newDue, setNewDue] = useState(String(loan.dueAmount));
+
+  const [payment, setPayment] = useState("");
 
   function handleViewClick() {
     setShowDetails(!showDetails);
   }
 
-  function handleUpdateSubmit(event) {
+  function handlePaymentSubmit(event) {
     event.preventDefault();
-    onUpdate(loan.id, Number(newDue));
+    
+    onUpdate(loan.id, loan.dueAmount - Number(payment));
+    setPayment(""); 
   }
 
   return (
@@ -28,21 +32,27 @@ function LoanCard({ loan, onDelete, onUpdate, showLink }) {
             Paid so far: {formatMoney(loan.amount - loan.dueAmount)}
           </p>
 
-          <form onSubmit={handleUpdateSubmit} className="d-flex gap-2">
-            <input
-              className="form-control form-control-sm"
-              type="number"
-              required
-              min="0"
-              max={loan.amount}
-              value={newDue}
-              onChange={(event) => setNewDue(event.target.value)}
-              aria-label="New amount still due"
-            />
-            <button type="submit" className="btn btn-sm btn-dark">
-              Update
-            </button>
-          </form>
+          {loan.dueAmount === 0 ? (
+            <p className="text-success fw-bold mb-0">Fully paid</p>
+          ) : (
+            <form onSubmit={handlePaymentSubmit}>
+              <label className="form-label mb-1">Record a payment (KSh)</label>
+              <div className="d-flex gap-2">
+                <input
+                  className="form-control form-control-sm"
+                  type="number"
+                  required
+                  min="1"
+                  max={loan.dueAmount}
+                  value={payment}
+                  onChange={(event) => setPayment(event.target.value)}
+                />
+                <button type="submit" className="btn btn-sm btn-dark">
+                  Pay
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       )}
 
@@ -50,7 +60,6 @@ function LoanCard({ loan, onDelete, onUpdate, showLink }) {
         {showDetails ? "Hide details" : "View details"}
       </button>
 
-     
       {showLink && (
         <Link to={"/loans/" + loan.id} className="btn btn-sm btn-outline-dark ms-2">
           Open page
