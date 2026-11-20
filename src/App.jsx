@@ -6,7 +6,6 @@ import LoanList from "./routes/LoanList";
 import AddLoan from "./routes/AddLoan";
 import LoanDetail from "./routes/LoanDetail";
 import Settings from "./routes/Settings";
-import NotFound from "./routes/NotFound";
 import { useLoans } from "./hooks/useLoans";
 import { useIncome } from "./hooks/useIncome";
 
@@ -58,7 +57,6 @@ function App() {
           path="/settings"
           element={<Settings monthlyIncome={monthlyIncome} onSave={saveIncome} />}
         />
-        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
