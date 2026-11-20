@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
+import { getToday } from "../utils/loanUtils";
 
 const API_URL = "http://localhost:3001/loans";
 
-export function useLoans() {
+function useLoans() {
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  
   useEffect(() => {
     fetch(API_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Could not load loans.");
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         setLoans(data);
         setLoading(false);
@@ -26,69 +21,59 @@ export function useLoans() {
       });
   }, []);
 
-  
   function addLoan(formData) {
-    const newLoan = {
-      lender: formData.lender,
-      amount: Number(formData.amount),
-      dueAmount: Number(formData.amount),
-      dueDate: formData.dueDate,
-    };
-
-    fetch(API_URL, {
+    return fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newLoan),
+      body: JSON.stringify({
+        lender: formData.lender,
+        amount: Number(formData.amount),
+        dueAmount: Number(formData.amount),
+        dueDate: formData.dueDate,
+        borrowerId: 1,
+      }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Could not save the loan.");
-        }
-        return response.json();
-      })
-      .then((savedLoan) => {
-        setLoans([...loans, savedLoan]);
-      })
-      .catch(() => {
-        setError("Could not save the loan. Is the server running?");
+      .then((response) => response.json())
+      .then((saved) => {
+        setLoans([...loans, saved]);
       });
   }
-
 
   function deleteLoan(id) {
-    fetch(API_URL + "/" + id, { method: "DELETE" })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Could not delete the loan.");
-        }
-        setLoans(loans.filter((loan) => loan.id !== id));
-      })
-      .catch(() => {
-        setError("Could not delete the loan. Is the server running?");
-      });
+    return fetch(API_URL + "/" + id, { method: "DELETE" }).then(() => {
+      setLoans(loans.filter((loan) => loan.id !== id));
+    });
   }
 
-  
   function updateLoan(id, newDueAmount) {
-    fetch(API_URL + "/" + id, {
-      method: "PATCH",
+    const loan = loans.find((item) => item.id === id);
+    const paidAmount = loan.dueAmount - newDueAmount;
+
+    return fetch("http://localhost:3001/payments", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dueAmount: newDueAmount }),
+      body: JSON.stringify({
+        loanId: id,
+        borrowerId: loan.borrowerId,
+        amount: paidAmount,
+        date: getToday(),
+      }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Could not update the loan.");
-        }
-        return response.json();
-      })
-      .then((updatedLoan) => {
-        setLoans(loans.map((loan) => (loan.id === id ? updatedLoan : loan)));
-      })
-      .catch(() => {
-        setError("Could not update the loan. Is the server running?");
+      .then(() =>
+        fetch(API_URL + "/" + id, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dueAmount: newDueAmount }),
+        })
+      )
+      .then((response) => response.json())
+      .then((updated) => {
+        setLoans(loans.map((item) => (item.id === id ? updated : item)));
       });
   }
-
 
   return { loans, loading, error, addLoan, deleteLoan, updateLoan };
 }
+
+export { useLoans };
+export default useLoans;

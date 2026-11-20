@@ -1,21 +1,102 @@
 {
-  "loans": [
+  "borrowers": [
     {
       "id": 1,
-      "lender": "Equity Bank",
-      "amount": 50000,
-      "dueAmount": 32000,
-      "dueDate": "2026-11-28"
+      "name": "Martin Muriithi"
+    }
+  ],
+  "lenders": [
+    {
+      "id": 1,
+      "name": "Uncle T"
     },
     {
       "id": 2,
-      "lender": "Sacco Loan",
-      "amount": 120000,
-      "dueAmount": 90000,
-      "dueDate": "2026-12-15"
+      "name": "Joseph Kang'ethe"
+    },
+    {
+      "id": 3,
+      "name": "Equity Bank"
+    },
+    {
+      "id": 4,
+      "name": "Moringa School"
+    },
+    {
+      "id": 5,
+      "name": "KCB"
+    },
+    {
+      "id": 6,
+      "name": "Absa Bank"
     }
   ],
+  "loans": [
+    {
+      "id": 2,
+      "borrowerId": 1,
+      "lenderId": 1,
+      "lender": "Uncle T",
+      "amount": 50000,
+      "dueAmount": 20000,
+      "dueDate": "2026-11-30"
+    },
+    {
+      "id": 3,
+      "borrowerId": 1,
+      "lenderId": 2,
+      "lender": "Joseph Kang'ethe",
+      "amount": 100000,
+      "dueAmount": 100000,
+      "dueDate": "2026-12-23"
+    },
+    {
+      "id": 4,
+      "borrowerId": 1,
+      "lenderId": 3,
+      "lender": "Equity Bank",
+      "amount": 250000,
+      "dueAmount": 250000,
+      "dueDate": "2027-03-02"
+    },
+    {
+      "id": 5,
+      "borrowerId": 1,
+      "lenderId": 4,
+      "lender": "Moringa School",
+      "amount": 174000,
+      "dueAmount": 174000,
+      "dueDate": "2027-01-06"
+    },
+    {
+      "id": 6,
+      "borrowerId": 1,
+      "lenderId": 5,
+      "lender": "KCB",
+      "amount": 200000,
+      "dueAmount": 200000,
+      "dueDate": "2027-02-18"
+    },
+    {
+      "id": 7,
+      "borrowerId": 1,
+      "lenderId": 6,
+      "lender": "Absa Bank",
+      "amount": 30000,
+      "dueAmount": 30000,
+      "dueDate": "2026-11-27"
+    },
+    {
+      "lender": "Uncle T",
+      "amount": 500,
+      "dueAmount": 500,
+      "dueDate": "2026-11-24",
+      "borrowerId": 1,
+      "id": 8
+    }
+  ],
+  "payments": [],
   "settings": {
-    "monthlyIncome": 45000
+    "monthlyIncome": 100000
   }
 }

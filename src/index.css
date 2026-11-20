@@ -92,3 +92,40 @@ body {
   color: #b9d3d0;
   max-width: 560px;
 }
+.hero-tag {
+  color: #d9fa57;
+  letter-spacing: 3px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+
+.feature-card {
+  background: white;
+  border: 1px solid #d3e6e3;
+  border-radius: 12px;
+  padding: 28px 22px;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+}
+
+.feature-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+
+.cta-band {
+  background: #102d35;
+  color: white;
+  padding: 56px 0;
+}
+
+.cta-band h2 {
+  font-weight: bold;
+}
